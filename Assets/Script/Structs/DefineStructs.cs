@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum AssetType
+public enum CCGAssetType
 {
     None,
     Money,
@@ -9,9 +9,9 @@ public enum AssetType
     PackageItem
 }
 
-public class Asset
+public class CCGAsset
 {
-    public AssetType AssetType = AssetType.None;
+    public CCGAssetType AssetType = CCGAssetType.None;
     public int Id;
     public int Count;
 }
