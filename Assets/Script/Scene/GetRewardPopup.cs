@@ -1,28 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class GetRewardPopupInitParam
+public class GetRewardPopupInitData
 {
-    List<CCGAsset> CCGAssetList = new List<CCGAsset>();
+    public CardListSO CardListSO = null;
+    public List<CCGAsset> CCGAssetList = null;
 }
 
-[PrefabPath("Prefab/UI/GetReward")]
+[PrefabPath("Prefab/UI/GetRewardPopup")]
 public class GetRewardPopup : MonoBehaviour
 {
-    GetRewardPopupInitParam initParam = null;
+    [SerializeField]
+    private RectTransform gridGroup = null;
 
-    public static GetRewardPopup CreatePopup(GetRewardPopupInitParam param)
+    private RewardSlot.Grid rewardSlotGird = null;
+
+    GetRewardPopupInitData data = null;
+
+    public static GetRewardPopup CreatePopup(GetRewardPopupInitData data)
     {
         var popup = GenericPrefab.Instantiate<GetRewardPopup>();
-        popup.Initialize(param);
+        popup.Initialize(data);
         return popup;
     }
 
-    private void Initialize(GetRewardPopupInitParam param)
+    private void Initialize(GetRewardPopupInitData data)
     {
-        initParam = param;
+        this.data = data;
+        if (rewardSlotGird == null) rewardSlotGird = new RewardSlot.Grid(CreateRewardSlot, DestroyRewardSlot);
 
+        var rewardDataList = data.CCGAssetList.ConvertAll<RewardData>(d => new RewardData()
+        {
+            CardSO = data.CardListSO.List.FirstOrDefault(so => so.CardId == d.Id)
+        });
+        rewardSlotGird.ApplyList(rewardDataList);
+    }
+
+    private List<RewardSlot> CreateRewardSlot(List<RewardData> dataList)
+    {
+        var slotList = GenericPrefab.Instantiate<RewardSlot>(gridGroup.transform, dataList.Count);
+        for (int i = 0; i < dataList.Count; ++i)
+        {
+            slotList[i].SetData(dataList[i]);
+        }
+        return slotList;
+    }
+
+    private void DestroyRewardSlot(RewardSlot slot)
+    {
+        Destroy(slot.gameObject);
     }
 
     public void OnClickClose()

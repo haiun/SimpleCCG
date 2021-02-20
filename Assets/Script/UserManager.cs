@@ -20,6 +20,7 @@ public class UserManager
     public void Initialzie(UserManagerInitData data)
     {
         this.data = data;
+        if (userField == null) userField = new UserField();
     }
 
     public void Load()

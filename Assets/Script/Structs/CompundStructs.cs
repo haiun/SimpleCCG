@@ -24,30 +24,50 @@ namespace Compound
     {
         public static StringBuilder sb = new StringBuilder();
 
+        public static void ApplyCardIcon(this Image image, CardSO cardSO)
+        {
+            image.sprite = cardSO.Icon;
+        }
+
+        public static void ApplyCardLevel(this Text text, int level)
+        {
+            sb.Length = 0;
+            sb.AppendFormat("Lv.{0:00}", level);
+            text.text = sb.ToString();
+        }
+
+        public static void ApplyCardAtkStat(this Text text, int stat)
+        {
+            sb.Length = 0;
+            sb.AppendFormat("ATK {0}", stat);
+            text.text = sb.ToString();
+        }
+
+        public static void ApplyCardDefStat(this Text text, int stat)
+        {
+            sb.Length = 0;
+            sb.AppendFormat("DEF {0}", stat);
+            text.text = sb.ToString();
+        }
+
         public static void ApplyCardIcon(this Image image, CardData model)
         {
-            image.sprite = model.CardSO.Icon;
+            ApplyCardIcon(image, model.CardSO);
         }
 
         public static void ApplyCardLevel(this Text text, CardData model)
         {
-            sb.Length = 0;
-            sb.AppendFormat("Lv.{0:00}", model.Level);
-            text.text = sb.ToString();
+            ApplyCardLevel(text, model.Level);
         }
 
         public static void ApplyCardAtkStat(this Text text, CardData model)
         {
-            sb.Length = 0;
-            sb.AppendFormat("ATK {0}", model.Attack);
-            text.text = sb.ToString();
+            ApplyCardAtkStat(text, model.Attack);
         }
 
         public static void ApplyCardDefStat(this Text text, CardData model)
         {
-            sb.Length = 0;
-            sb.AppendFormat("DEF {0}", model.Defense);
-            text.text = sb.ToString();
+            ApplyCardDefStat(text, model.Defense);
         }
     }
 }

@@ -14,6 +14,11 @@ public class CardFrame : MonoBehaviour
     {
         view.ApplyCardData(data);
     }
+
+    public void ApplyRewardData(RewardData data)
+    {
+        view.ApplyRewardData(data);
+    }
 }
 
 [Serializable]
@@ -32,5 +37,16 @@ public class CardFrameView
 
         Icon.ApplyCardIcon(data);
         Level.ApplyCardLevel(data);
+    }
+
+    public void ApplyRewardData(RewardData data)
+    {
+        for (int i = 0; i < TierStar.Count; ++i)
+        {
+            TierStar[i].SetActive(i < data.CardSO.Tier);
+        }
+
+        Icon.ApplyCardIcon(data.CardSO);
+        Level.ApplyCardLevel(1);
     }
 }

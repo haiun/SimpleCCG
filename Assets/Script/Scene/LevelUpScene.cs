@@ -5,5 +5,8 @@ using UnityEngine;
 [PrefabPath("Prefab/UI/LevelUpScene")]
 public class LevelUpScene : MonoBehaviour
 {
-
+    public void OnClickClose()
+    {
+        Destroy(gameObject);
+    }
 }

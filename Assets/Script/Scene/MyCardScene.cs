@@ -36,12 +36,12 @@ public class MyCardScene : MonoBehaviour
 
     private List<MyCardSlot> CreateMyCardSlot(List<MyCardSlotData> dataList)
     {
-        var ret = GenericPrefab.Instantiate<MyCardSlot>(gridGroup.transform, dataList.Count);
-        foreach (var sd in ret.Zip(dataList, (s, d) => new { slot = s, data = d }))
+        var slotList = GenericPrefab.Instantiate<MyCardSlot>(gridGroup.transform, dataList.Count);
+        for (int i = 0; i < dataList.Count; ++i)
         {
-            sd.slot.SetData(sd.data);
+            slotList[i].SetData(dataList[i]);
         }
-        return ret;
+        return slotList;
     }
 
     private void DestroyMyCardSlot(MyCardSlot slot)

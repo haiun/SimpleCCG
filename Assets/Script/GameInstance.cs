@@ -17,7 +17,7 @@ public class GameInstance : MonoBehaviour
             TableManager = tableManager,
             CardListSO = CardListSO
         });
-        userManager.Load();
+        //userManager.Load();
 
         var startScene = GenericPrefab.Instantiate<MainScene>();
         startScene.Initailze(new MainSceneInitData()

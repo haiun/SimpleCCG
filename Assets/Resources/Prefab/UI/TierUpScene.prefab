@@ -1489,7 +1489,7 @@ GameObject:
   - component: {fileID: 8151433892094671220}
   - component: {fileID: 4946148661871724093}
   - component: {fileID: 2437283285298854080}
-  - component: {fileID: 1708087568343621970}
+  - component: {fileID: 5020122669787197046}
   m_Layer: 5
   m_Name: TierUpScene
   m_TagString: Untagged
@@ -1580,7 +1580,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1708087568343621970
+--- !u!114 &5020122669787197046
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1589,7 +1589,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6225948748393442965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a66869f696078c47b593daa36aa94b6, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dd15279a5def1f429e9c8bf8ff1af20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6385649593591174454
@@ -3236,7 +3236,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4564947330898891789}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5020122669787197046}
+        m_TargetAssemblyTypeName: TierUpScene, Assembly-CSharp
+        m_MethodName: OnClickClose
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &9076632718291539072
 GameObject:
   m_ObjectHideFlags: 0

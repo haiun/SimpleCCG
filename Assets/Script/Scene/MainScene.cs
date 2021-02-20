@@ -22,6 +22,12 @@ public class MainScene : MonoBehaviour
     public void OnClickGetCard()
     {
         var ret = data.UserManager.GetNewT1Card();
+
+        GetRewardPopup.CreatePopup(new GetRewardPopupInitData()
+        {
+            CardListSO = data.CardListSO,
+            CCGAssetList = new List<CCGAsset>() { ret }
+        });
     }
 
     public void OnClickMyCard()
@@ -31,5 +37,15 @@ public class MainScene : MonoBehaviour
         {
             UserManager = data.UserManager
         });
+    }
+
+    public void OnClickLevelUp()
+    {
+        var myCardScene = GenericPrefab.Instantiate<LevelUpScene>();
+    }
+
+    public void OnClickTierUp()
+    {
+        var myCardScene = GenericPrefab.Instantiate<TierUpScene>();
     }
 }
