@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace Compound
 {
@@ -13,10 +14,23 @@ namespace Compound
         public int Level { get; private set; }
         public int Attack { get; private set; }
         public int Defense { get; private set; }
+        public int Exp { get; private set; }
+        public int NextExp { get; private set; }
 
         public void OnUpdateUserCard(TableManager tableManager)
         {
+            var cardLevel = tableManager.CardLevelList.LastOrDefault(c => c.Tier == UserCard.Tier && c.TotalExp <= UserCard.TotalExp);
+            var cardTier = tableManager.CardTierList.FirstOrDefault(c => c.Tier == UserCard.Tier);
 
+            Level = cardLevel.Level;
+
+            //base stat ~ x2
+            int statBonusPercentage = ((Level - 1) * 100) / (cardTier.MaxLevel - 1) + 100;
+            Attack = (CardSO.Attack * statBonusPercentage) / 100;
+            Defense = (CardSO.Defense * statBonusPercentage) / 100;
+
+            Exp = UserCard.TotalExp - (cardLevel.TotalNextExp - cardLevel.NextExp);
+            NextExp = cardLevel.NextExp;
         }
     }
 

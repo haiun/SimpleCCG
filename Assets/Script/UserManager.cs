@@ -15,11 +15,11 @@ public class UserManager
     private readonly string key = "SAVE";
     private UserField userField = null;
 
-    UserManagerInitData data = null;
+    UserManagerInitData initData = null;
 
     public void Initialzie(UserManagerInitData data)
     {
-        this.data = data;
+        this.initData = data;
         if (userField == null) userField = new UserField();
     }
 
@@ -37,20 +37,42 @@ public class UserManager
         PlayerPrefs.SetString(key, json);
     }
 
-    public List<CardData> GetUserCardDataList()
+    public List<CardData> GetCardDataList()
     {
         var ret = userField.UserCardList.ConvertAll<CardData>(u => new CardData()
         {
-            CardSO = data.CardListSO.List.FirstOrDefault(c => c.CardId == u.CardId),
+            CardSO = initData.CardListSO.List.FirstOrDefault(c => c.CardId == u.CardId),
             UserCard = u
         });
-        ret.ForEach(m => m.OnUpdateUserCard(data.TableManager));
+        ret.ForEach(m => m.OnUpdateUserCard(initData.TableManager));
         return ret;
+    }
+
+    public CCGAsset GetNewCard()
+    {
+        int randIndex = Random.Range(0, initData.CardListSO.List.Count);
+        var newCardSO = initData.CardListSO.List[randIndex];
+        int newUserId = userField.UserCardList.Count > 0 ? userField.UserCardList.Max(m => m.UserCardId) + 1 : 1;
+
+        userField.UserCardList.Add(new UserCard()
+        {
+            UserCardId = newUserId,
+            CardId = newCardSO.CardId,
+            Tier = newCardSO.Tier,
+            TotalExp = 0
+        });
+
+        return new CCGAsset()
+        {
+            AssetType = CCGAssetType.Card,
+            Id = newCardSO.CardId,
+            Count = 1
+        };
     }
 
     public CCGAsset GetNewT1Card()
     {
-        var t1List = data.CardListSO.List.Where(w => w.Tier == 1).ToList();
+        var t1List = initData.CardListSO.List.Where(w => w.Tier == 1).ToList();
         int randIndex = Random.Range(0, t1List.Count);
         var newCardSO = t1List[randIndex];
         int newUserId = userField.UserCardList.Count > 0 ? userField.UserCardList.Max(m => m.UserCardId) + 1 : 1;
@@ -60,8 +82,70 @@ public class UserManager
             UserCardId = newUserId,
             CardId = newCardSO.CardId,
             Tier = newCardSO.Tier,
-            Exp = 0
+            TotalExp = 0
         });
+
+        return new CCGAsset()
+        {
+            AssetType = CCGAssetType.Card,
+            Id = newCardSO.CardId,
+            Count = 1
+        };
+    }
+
+    public void CardLevelUp(int targetUserCardId, List<int> materialCardUserIdList)
+    {
+        var targetUserCard = userField.UserCardList.FirstOrDefault(t => t.UserCardId == targetUserCardId);
+
+        int sumExp = 0;
+        foreach (var materialUserCardId in materialCardUserIdList)
+        {
+            var materialUserCard = userField.UserCardList.FirstOrDefault(u => u.UserCardId == materialUserCardId);
+            var cardTier = initData.TableManager.CardTierList.FirstOrDefault(t => t.Tier == materialUserCard.Tier);
+            sumExp += cardTier.MaterialExp;
+
+            userField.UserCardList.Remove(materialUserCard);
+        }
+
+        targetUserCard.TotalExp += sumExp;
+    }
+
+    public CCGAsset CardTierUp(int userCardId1, int userCardId2)
+    {
+        var tableManager = initData.TableManager;
+
+        var userCard1 = userField.UserCardList.FirstOrDefault(u => u.UserCardId == userCardId1);
+        var userCard2 = userField.UserCardList.FirstOrDefault(u => u.UserCardId == userCardId2);
+
+        var cardLevel1 = tableManager.CardLevelList.LastOrDefault(c => c.Tier == userCard1.Tier && c.TotalExp <= userCard1.TotalExp);
+        var cardLevel2 = tableManager.CardLevelList.LastOrDefault(c => c.Tier == userCard2.Tier && c.TotalExp <= userCard2.TotalExp);
+
+        var tierUpWeight = tableManager.GetTierUpWeight(userCard1.Tier, cardLevel1.Level, userCard2.Tier, cardLevel2.Level);
+        var rand = Random.Range(0, 100);
+        int tier = tierUpWeight[0].Tier;
+        if (tierUpWeight[0].Weight < rand)
+        {
+            tier = tierUpWeight[1].Tier;
+        }
+
+        var tierCardIdList = initData.CardListSO.List.Where(w => w.Tier == tier).ToList();
+        Debug.Log(tierCardIdList.Count);
+        int randIndex = Random.Range(0, tierCardIdList.Count);
+        Debug.Log(randIndex);
+        var newCardSO = tierCardIdList[randIndex];
+        Debug.Log(newCardSO);
+        int newUserId = userField.UserCardList.Count > 0 ? userField.UserCardList.Max(m => m.UserCardId) + 1 : 1;
+
+        userField.UserCardList.Add(new UserCard()
+        {
+            UserCardId = newUserId,
+            CardId = newCardSO.CardId,
+            Tier = newCardSO.Tier,
+            TotalExp = 0
+        });
+
+        userField.UserCardList.Remove(userCard1);
+        userField.UserCardList.Remove(userCard2);
 
         return new CCGAsset()
         {

@@ -14,10 +14,12 @@ namespace Table
 
     public class CardLevel
     {
-        public int BaseTier;
+        public int Tier;
         public int Level;
 
-        public int Exp;
+        public int TotalExp;
+        public int NextExp;
+        public int TotalNextExp;
     }
 
     public class CardTier
@@ -32,12 +34,6 @@ namespace Table
     {
         public int Tier;
         public int Weight;
-    }
-
-    public class CardTierUp
-    {
-        public int TierSum;
-        public List<CardTierUpWeight> WeightList;
     }
 
     public class PackageItem

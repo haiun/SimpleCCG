@@ -1,26 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MyCardSceneInitData
+public class SelectTargetSceneInitData
 {
     public UserManager UserManager = null;
+    public Action<MyCardSlotData> OnSelect = null;
 }
 
-[PrefabPath("Prefab/UI/MyCardScene")]
-public class MyCardScene : MonoBehaviour
+[PrefabPath("Prefab/UI/SelectTargetScene")]
+public class SelectTargetScene : MonoBehaviour
 {
     [SerializeField]
     private GridLayoutGroup gridGroup = null;
-    
-    private MyCardSceneInitData data = null;
+
+    private SelectTargetSceneInitData initData = null;
     private MyCardSlot.Grid grid = null;
 
-    public void Initialize(MyCardSceneInitData data)
+    public void Initialize(SelectTargetSceneInitData data)
     {
-        this.data = data;
+        initData = data;
 
         if (grid == null)
             grid = new MyCardSlot.Grid(CreateMyCardSlot, DestroyMyCardSlot);
@@ -51,7 +52,17 @@ public class MyCardScene : MonoBehaviour
 
     public void OnClickMyCardSlot(MyCardSlotData data, MyCardSlot slot)
     {
-        Debug.Log(data.CardData.UserCard.UserCardId);
+        var popup = SelectCardPopup.CreatePopup(new SelectCardPopupInitData()
+        {
+            SelectedCardData = data,
+            OnSelect = OnSelectCard
+        });
+    }
+
+    private void OnSelectCard(MyCardSlotData data)
+    {
+        initData.OnSelect?.Invoke(data);
+        Destroy(gameObject);
     }
 
     public void OnClickClose()

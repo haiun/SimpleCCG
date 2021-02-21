@@ -15,3 +15,5 @@ MonoBehaviour:
   CardId: 304
   Icon: {fileID: -6367560908665664636, guid: 40de9a8703e2e5a47882b0b86451c741, type: 3}
   Tier: 2
+  Attack: 1500
+  Defense: 1500

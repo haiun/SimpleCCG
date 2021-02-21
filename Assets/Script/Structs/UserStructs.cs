@@ -20,7 +20,7 @@ namespace User
         public int UserCardId = 0;
 
         public int CardId = 0;
-        public int Exp = 0;
+        public int TotalExp = 0;
         public int Tier = 0;
     }
 }

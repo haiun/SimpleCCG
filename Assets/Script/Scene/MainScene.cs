@@ -12,21 +12,31 @@ public class MainSceneInitData
 [PrefabPath("Prefab/UI/MainScene")]
 public class MainScene : MonoBehaviour
 {
-    MainSceneInitData data = null;
+    MainSceneInitData initData = null;
 
     public void Initailze(MainSceneInitData data)
     {
-        this.data = data;
+        this.initData = data;
+
+        var newCardAssetList = new List<CCGAsset>();
+        for (int i = 0; i < 20; ++i)
+        {
+            newCardAssetList.Add(data.UserManager.GetNewCard());
+        }
     }
 
     public void OnClickGetCard()
     {
-        var ret = data.UserManager.GetNewT1Card();
+        var newCardAssetList = new List<CCGAsset>();
+        for (int i = 0; i < 3; ++i)
+        {
+            newCardAssetList.Add(initData.UserManager.GetNewT1Card());
+        }
 
         GetRewardPopup.CreatePopup(new GetRewardPopupInitData()
         {
-            CardListSO = data.CardListSO,
-            CCGAssetList = new List<CCGAsset>() { ret }
+            CardListSO = initData.CardListSO,
+            CCGAssetList = newCardAssetList
         });
     }
 
@@ -35,17 +45,38 @@ public class MainScene : MonoBehaviour
         var myCardScene = GenericPrefab.Instantiate<MyCardScene>();
         myCardScene?.Initialize(new MyCardSceneInitData()
         {
-            UserManager = data.UserManager
+            UserManager = initData.UserManager
         });
     }
 
     public void OnClickLevelUp()
     {
-        var myCardScene = GenericPrefab.Instantiate<LevelUpScene>();
+        var selectTargetScene = GenericPrefab.Instantiate<SelectTargetScene>();
+        selectTargetScene.Initialize(new SelectTargetSceneInitData()
+        {
+            UserManager = initData.UserManager,
+            OnSelect = (myCardSlotData) =>
+            {
+                var myCardScene = GenericPrefab.Instantiate<LevelUpScene>();
+                myCardScene.Initialize(new LevelUpSceneInitData()
+                {
+                    TableManager = initData.TableManager,
+                    UserManager = initData.UserManager,
+                    SelectedTargetData = myCardSlotData
+                });
+            }
+        });
+
     }
 
     public void OnClickTierUp()
     {
         var myCardScene = GenericPrefab.Instantiate<TierUpScene>();
+        myCardScene.Initialize(new TierUpSceneInitData()
+        {
+            CardListSO = initData.CardListSO,
+            TableManager = initData.TableManager,
+            UserManager = initData.UserManager
+        });
     }
 }
