@@ -12,14 +12,14 @@ public class MainSceneInitData
 [PrefabPath("Prefab/UI/MainScene")]
 public class MainScene : MonoBehaviour
 {
-    MainSceneInitData initData = null;
+    private MainSceneInitData initData = null;
 
-    public void Initailze(MainSceneInitData data)
+    public void Initialize(MainSceneInitData data)
     {
         this.initData = data;
 
         var newCardAssetList = new List<CCGAsset>();
-        for (int i = 0; i < 20; ++i)
+        for (var i = 0; i < 20; ++i)
         {
             newCardAssetList.Add(data.UserManager.GetNewCard());
         }
@@ -28,7 +28,7 @@ public class MainScene : MonoBehaviour
     public void OnClickGetCard()
     {
         var newCardAssetList = new List<CCGAsset>();
-        for (int i = 0; i < 3; ++i)
+        for (var i = 0; i < 3; ++i)
         {
             newCardAssetList.Add(initData.UserManager.GetNewT1Card());
         }
@@ -43,7 +43,7 @@ public class MainScene : MonoBehaviour
     public void OnClickMyCard()
     {
         var myCardScene = GenericPrefab.Instantiate<MyCardScene>();
-        myCardScene?.Initialize(new MyCardSceneInitData()
+        myCardScene.Initialize(new MyCardSceneInitData()
         {
             UserManager = initData.UserManager
         });

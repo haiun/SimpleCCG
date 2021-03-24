@@ -17,17 +17,16 @@ public class UserManager
 
     UserManagerInitData initData = null;
 
-    public void Initialzie(UserManagerInitData data)
+    public void Initialize(UserManagerInitData data)
     {
         this.initData = data;
-        if (userField == null) userField = new UserField();
+        userField ??= new UserField();
     }
 
     public void Load()
     {
         var json = PlayerPrefs.GetString(key);
-        userField = JsonUtility.FromJson<UserField>(json);
-        if (userField == null) userField = new UserField();
+        userField = JsonUtility.FromJson<UserField>(json) ?? new UserField();
         userField.Initialize();
     }
 
@@ -50,7 +49,7 @@ public class UserManager
 
     public CCGAsset GetNewCard()
     {
-        int randIndex = Random.Range(0, initData.CardListSO.List.Count);
+        var randIndex = Random.Range(0, initData.CardListSO.List.Count);
         var newCardSO = initData.CardListSO.List[randIndex];
         int newUserId = userField.UserCardList.Count > 0 ? userField.UserCardList.Max(m => m.UserCardId) + 1 : 1;
 
@@ -73,9 +72,9 @@ public class UserManager
     public CCGAsset GetNewT1Card()
     {
         var t1List = initData.CardListSO.List.Where(w => w.Tier == 1).ToList();
-        int randIndex = Random.Range(0, t1List.Count);
+        var randIndex = Random.Range(0, t1List.Count);
         var newCardSO = t1List[randIndex];
-        int newUserId = userField.UserCardList.Count > 0 ? userField.UserCardList.Max(m => m.UserCardId) + 1 : 1;
+        var newUserId = userField.UserCardList.Count > 0 ? userField.UserCardList.Max(m => m.UserCardId) + 1 : 1;
 
         userField.UserCardList.Add(new UserCard()
         {
@@ -97,7 +96,7 @@ public class UserManager
     {
         var targetUserCard = userField.UserCardList.FirstOrDefault(t => t.UserCardId == targetUserCardId);
 
-        int sumExp = 0;
+        var sumExp = 0;
         foreach (var materialUserCardId in materialCardUserIdList)
         {
             var materialUserCard = userField.UserCardList.FirstOrDefault(u => u.UserCardId == materialUserCardId);
@@ -122,7 +121,7 @@ public class UserManager
 
         var tierUpWeight = tableManager.GetTierUpWeight(userCard1.Tier, cardLevel1.Level, userCard2.Tier, cardLevel2.Level);
         var rand = Random.Range(0, 100);
-        int tier = tierUpWeight[0].Tier;
+        var tier = tierUpWeight[0].Tier;
         if (tierUpWeight[0].Weight < rand)
         {
             tier = tierUpWeight[1].Tier;
@@ -130,11 +129,11 @@ public class UserManager
 
         var tierCardIdList = initData.CardListSO.List.Where(w => w.Tier == tier).ToList();
         Debug.Log(tierCardIdList.Count);
-        int randIndex = Random.Range(0, tierCardIdList.Count);
+        var randIndex = Random.Range(0, tierCardIdList.Count);
         Debug.Log(randIndex);
         var newCardSO = tierCardIdList[randIndex];
         Debug.Log(newCardSO);
-        int newUserId = userField.UserCardList.Count > 0 ? userField.UserCardList.Max(m => m.UserCardId) + 1 : 1;
+        var newUserId = userField.UserCardList.Count > 0 ? userField.UserCardList.Max(m => m.UserCardId) + 1 : 1;
 
         userField.UserCardList.Add(new UserCard()
         {

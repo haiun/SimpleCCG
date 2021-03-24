@@ -23,8 +23,7 @@ public class SelectTargetScene : MonoBehaviour
     {
         initData = data;
 
-        if (grid == null)
-            grid = new MyCardSlot.Grid(CreateMyCardSlot, DestroyMyCardSlot);
+        grid ??= new MyCardSlot.Grid(CreateMyCardSlot, DestroyMyCardSlot);
 
         var cardDataList = data.UserManager.GetCardDataList();
         var myCardDataList = cardDataList.ConvertAll<MyCardSlotData>(d => new MyCardSlotData()
@@ -50,7 +49,7 @@ public class SelectTargetScene : MonoBehaviour
         Destroy(slot.gameObject);
     }
 
-    public void OnClickMyCardSlot(MyCardSlotData data, MyCardSlot slot)
+    private void OnClickMyCardSlot(MyCardSlotData data, MyCardSlot slot)
     {
         var popup = SelectCardPopup.CreatePopup(new SelectCardPopupInitData()
         {

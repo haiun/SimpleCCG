@@ -40,7 +40,7 @@ public class MaterialCardSlotView
 
     public void ApplyMaterialCardSlotData(MaterialCardSlotData data)
     {
-        bool activeSelection = data.SelectedIndex > 0;
+        var activeSelection = data.SelectedIndex > 0;
         SelectionRoot.SetActive(activeSelection);
         if (activeSelection)
         {

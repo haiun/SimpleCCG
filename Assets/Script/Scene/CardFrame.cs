@@ -30,7 +30,7 @@ public class CardFrameView
 
     public void ApplyCardData(CardData data)
     {
-        for (int i = 0; i < TierStar.Count; ++i)
+        for (var i = 0; i < TierStar.Count; ++i)
         {
             TierStar[i].SetActive(i < data.CardSO.Tier);
         }
@@ -41,7 +41,7 @@ public class CardFrameView
 
     public void ApplyRewardData(RewardData data)
     {
-        for (int i = 0; i < TierStar.Count; ++i)
+        for (var i = 0; i < TierStar.Count; ++i)
         {
             TierStar[i].SetActive(i < data.CardSO.Tier);
         }

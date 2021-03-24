@@ -14,7 +14,7 @@ public class PrefabPath : Attribute
     }
 }
 
-public class GenericPrefab
+public static class GenericPrefab
 {
     public static T Instantiate<T>()
     {
@@ -36,8 +36,8 @@ public class GenericPrefab
     {
         var prefabPathAttr = typeof(T).GetCustomAttribute<PrefabPath>();
         var prefab = Resources.Load(prefabPathAttr.Path) as GameObject;
-        List<T> ret = new List<T>();
-        for (int i = 0; i < count; ++i)
+        var ret = new List<T>();
+        for (var i = 0; i < count; ++i)
         {
             var go = GameObject.Instantiate(prefab, parent);
             ret.Add(go.GetComponent<T>());

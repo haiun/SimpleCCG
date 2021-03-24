@@ -30,6 +30,6 @@ public class TierUpResultSlotView
             TierStar[i].SetActive(i < data.Tier);
         }
 
-        Weight.text = string.Format("{0}%%", data.Weight);
+        Weight.text = $"{data.Weight}%%";
     }
 }

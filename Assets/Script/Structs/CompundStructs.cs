@@ -25,7 +25,7 @@ namespace Compound
             Level = cardLevel.Level;
 
             //base stat ~ x2
-            int statBonusPercentage = ((Level - 1) * 100) / (cardTier.MaxLevel - 1) + 100;
+            var statBonusPercentage = ((Level - 1) * 100) / (cardTier.MaxLevel - 1) + 100;
             Attack = (CardSO.Attack * statBonusPercentage) / 100;
             Defense = (CardSO.Defense * statBonusPercentage) / 100;
 
@@ -34,9 +34,9 @@ namespace Compound
         }
     }
 
-    public static class CardDataExtention
+    public static class CardDataExtension
     {
-        public static StringBuilder sb = new StringBuilder();
+        private static StringBuilder sb = new StringBuilder();
 
         public static void ApplyCardIcon(this Image image, CardSO cardSO)
         {

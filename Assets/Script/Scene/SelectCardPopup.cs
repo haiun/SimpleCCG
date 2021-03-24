@@ -24,7 +24,7 @@ public class SelectCardPopup : MonoBehaviour
         return popup;
     }
 
-    public void Initialize(SelectCardPopupInitData data)
+    private void Initialize(SelectCardPopupInitData data)
     {
         this.data = data;
         myCardSlot.SetData(data.SelectedCardData);

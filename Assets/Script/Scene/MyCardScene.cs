@@ -37,19 +37,19 @@ public class MyCardScene : MonoBehaviour
     private List<MyCardSlot> CreateMyCardSlot(List<MyCardSlotData> dataList)
     {
         var slotList = GenericPrefab.Instantiate<MyCardSlot>(gridGroup.transform, dataList.Count);
-        for (int i = 0; i < dataList.Count; ++i)
+        for (var i = 0; i < dataList.Count; ++i)
         {
             slotList[i].SetData(dataList[i]);
         }
         return slotList;
     }
 
-    private void DestroyMyCardSlot(MyCardSlot slot)
+    private static void DestroyMyCardSlot(MyCardSlot slot)
     {
         Destroy(slot.gameObject);
     }
 
-    public void OnClickMyCardSlot(MyCardSlotData data, MyCardSlot slot)
+    private void OnClickMyCardSlot(MyCardSlotData data, MyCardSlot slot)
     {
         Debug.Log(data.CardData.UserCard.UserCardId);
     }

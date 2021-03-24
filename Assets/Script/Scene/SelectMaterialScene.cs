@@ -27,14 +27,13 @@ public class SelectMaterialScene : MonoBehaviour
     private SelectMaterialSceneInitData initData = null;
     private MaterialCardSlot.Grid grid = null;
 
-    private List<MaterialCardSlotData> selectedCardDataList = new List<MaterialCardSlotData>();
+    private readonly List<MaterialCardSlotData> selectedCardDataList = new List<MaterialCardSlotData>();
 
     public void Initialize(SelectMaterialSceneInitData data)
     {
         initData = data;
 
-        if (grid == null)
-            grid = new MaterialCardSlot.Grid(CreateMaterialCardSlot, DestroyMaterialCardSlot);
+        grid ??= new MaterialCardSlot.Grid(CreateMaterialCardSlot, DestroyMaterialCardSlot);
 
         var cardDataList = data.UserManager.GetCardDataList();
         cardDataList.RemoveAll(r => initData.IgnoreCardDataList.Exists(e => e.UserCard.UserCardId == r.UserCard.UserCardId));
@@ -45,7 +44,7 @@ public class SelectMaterialScene : MonoBehaviour
             OnClickSlot = OnClickMaterialCardSlot
         });
 
-        int selectedIndex = 0;
+        var selectedIndex = 0;
         foreach (var selectedCardData in initData.selectedCardDataList)
         {
             selectedIndex++;
@@ -62,7 +61,7 @@ public class SelectMaterialScene : MonoBehaviour
     private List<MaterialCardSlot> CreateMaterialCardSlot(List<MaterialCardSlotData> dataList)
     {
         var slotList = GenericPrefab.Instantiate<MaterialCardSlot>(gridGroup.transform, dataList.Count);
-        for (int i = 0; i < dataList.Count; ++i)
+        for (var i = 0; i < dataList.Count; ++i)
         {
             slotList[i].SetData(dataList[i]);
         }
@@ -74,7 +73,7 @@ public class SelectMaterialScene : MonoBehaviour
         Destroy(slot.gameObject);
     }
 
-    public void OnClickMaterialCardSlot(MaterialCardSlotData data, MaterialCardSlot slot)
+    private void OnClickMaterialCardSlot(MaterialCardSlotData data, MaterialCardSlot slot)
     {
         var selected = selectedCardDataList.FirstOrDefault(d => d.CardData.UserCard.UserCardId == data.CardData.UserCard.UserCardId);
         if (selected == null)
@@ -107,7 +106,7 @@ public class SelectMaterialScene : MonoBehaviour
 
     private void UpdateCardSelection()
     {
-        for (int i = 0; i < selectedCardDataList.Count; ++i)
+        for (var i = 0; i < selectedCardDataList.Count; ++i)
         {
             selectedCardDataList[i].SelectedIndex = i + 1;
         }

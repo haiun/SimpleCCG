@@ -2303,7 +2303,7 @@ MonoBehaviour:
   CardFrameList:
   - {fileID: 7115942466002622896}
   - {fileID: 7136851705051750049}
-  tierUpResurltSlotLayoutGroup: {fileID: 3628762576404038408}
+  tierUpResultSlotLayoutGroup: {fileID: 3628762576404038408}
 --- !u!1 &6730591668069029240
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class TierUpSceneInitData
@@ -20,42 +21,42 @@ public class TierUpScene : MonoBehaviour
     private List<CardFrame> CardFrameList = null;
 
     [SerializeField]
-    private RectTransform tierUpResurltSlotLayoutGroup = null;
-    private TierUpResultSlot.Grid tierUpResurltSlotGrid = null;
+    private RectTransform tierUpResultSlotLayoutGroup = null;
+    private TierUpResultSlot.Grid tierUpResultSlotGrid = null;
 
     private TierUpSceneInitData initData = null;
-    private List<Compound.CardData> mateiralCardDataList = new List<Compound.CardData>();
+    private List<Compound.CardData> materialCardDataList = new List<Compound.CardData>();
 
     public void Initialize(TierUpSceneInitData data)
     {
         initData = data;
 
-        if (tierUpResurltSlotGrid == null) tierUpResurltSlotGrid = new TierUpResultSlot.Grid(CreateTierUpResurltSlot, DestroyTierUpResurltSlot);
+        tierUpResultSlotGrid ??= new TierUpResultSlot.Grid(CreateTierUpResurltSlot, DestroyTierUpResultSlot);
 
-        SetMateiralCardDataList(new List<Compound.CardData>());
+        SetMaterialCardDataList(new List<Compound.CardData>());
     }
 
-    private void SetMateiralCardDataList(List<Compound.CardData> mateiralCardDataList)
+    private void SetMaterialCardDataList(List<Compound.CardData> materialCardDataList)
     {
-        this.mateiralCardDataList = mateiralCardDataList;
+        this.materialCardDataList = materialCardDataList;
 
         List<Table.CardTierUpWeight> weightList = null;
 
-        if (mateiralCardDataList.Count == 2)
+        if (materialCardDataList.Count == 2)
         {
             CardFrameList[0].gameObject.SetActive(true);
             CardFrameList[1].gameObject.SetActive(true);
 
-            CardFrameList[0].ApplyCardData(mateiralCardDataList[0]);
-            CardFrameList[1].ApplyCardData(mateiralCardDataList[1]);
+            CardFrameList[0].ApplyCardData(materialCardDataList[0]);
+            CardFrameList[1].ApplyCardData(materialCardDataList[1]);
 
             TierUpButton.interactable = true;
 
             weightList = initData.TableManager.GetTierUpWeight(
-                mateiralCardDataList[0].UserCard.Tier,
-                mateiralCardDataList[0].Level,
-                mateiralCardDataList[1].UserCard.Tier,
-                mateiralCardDataList[1].Level);
+                materialCardDataList[0].UserCard.Tier,
+                materialCardDataList[0].Level,
+                materialCardDataList[1].UserCard.Tier,
+                materialCardDataList[1].Level);
         }
         else
         {
@@ -67,20 +68,20 @@ public class TierUpScene : MonoBehaviour
             weightList = new List<Table.CardTierUpWeight>();
         }
 
-        tierUpResurltSlotGrid.ApplyList(weightList);
+        tierUpResultSlotGrid.ApplyList(weightList);
     }
 
     private List<TierUpResultSlot> CreateTierUpResurltSlot(List<Table.CardTierUpWeight> dataList)
     {
-        var slotList = GenericPrefab.Instantiate<TierUpResultSlot>(tierUpResurltSlotLayoutGroup.transform, dataList.Count);
-        for (int i = 0; i < dataList.Count; ++i)
+        var slotList = GenericPrefab.Instantiate<TierUpResultSlot>(tierUpResultSlotLayoutGroup.transform, dataList.Count);
+        for (var i = 0; i < dataList.Count; ++i)
         {
             slotList[i].SetData(dataList[i]);
         }
         return slotList;
     }
 
-    private void DestroyTierUpResurltSlot(TierUpResultSlot slot)
+    private static void DestroyTierUpResultSlot(TierUpResultSlot slot)
     {
         Destroy(slot.gameObject);
     }
@@ -95,13 +96,13 @@ public class TierUpScene : MonoBehaviour
             selectedCardDataList = new List<Compound.CardData>(),
             LimitCount = 2,
             FullSelect = true,
-            OnSelect = SetMateiralCardDataList
+            OnSelect = SetMaterialCardDataList
         });
     }
 
     public void OnClickTierUp()
     {
-        var newCardAsset = initData.UserManager.CardTierUp(mateiralCardDataList[0].UserCard.UserCardId, mateiralCardDataList[1].UserCard.UserCardId);
+        var newCardAsset = initData.UserManager.CardTierUp(materialCardDataList[0].UserCard.UserCardId, materialCardDataList[1].UserCard.UserCardId);
 
         GetRewardPopup.CreatePopup(new GetRewardPopupInitData()
         {
@@ -109,7 +110,7 @@ public class TierUpScene : MonoBehaviour
             CCGAssetList = new List<CCGAsset>() { newCardAsset }
         });
 
-        SetMateiralCardDataList(new List<Compound.CardData>());
+        SetMaterialCardDataList(new List<Compound.CardData>());
     }
 
     public void OnClickClose()

@@ -17,7 +17,7 @@ public class GetRewardPopup : MonoBehaviour
 
     private RewardSlot.Grid rewardSlotGird = null;
 
-    GetRewardPopupInitData data = null;
+    private GetRewardPopupInitData data = null;
 
     public static GetRewardPopup CreatePopup(GetRewardPopupInitData data)
     {
@@ -29,7 +29,7 @@ public class GetRewardPopup : MonoBehaviour
     private void Initialize(GetRewardPopupInitData data)
     {
         this.data = data;
-        if (rewardSlotGird == null) rewardSlotGird = new RewardSlot.Grid(CreateRewardSlot, DestroyRewardSlot);
+        rewardSlotGird ??= new RewardSlot.Grid(CreateRewardSlot, DestroyRewardSlot);
 
         var rewardDataList = data.CCGAssetList.ConvertAll<RewardData>(d => new RewardData()
         {
@@ -41,7 +41,7 @@ public class GetRewardPopup : MonoBehaviour
     private List<RewardSlot> CreateRewardSlot(List<RewardData> dataList)
     {
         var slotList = GenericPrefab.Instantiate<RewardSlot>(gridGroup.transform, dataList.Count);
-        for (int i = 0; i < dataList.Count; ++i)
+        for (var i = 0; i < dataList.Count; ++i)
         {
             slotList[i].SetData(dataList[i]);
         }

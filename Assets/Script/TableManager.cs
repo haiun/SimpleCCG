@@ -72,15 +72,15 @@ public class TableManager
         UnityEngine.Debug.LogFormat("tier {0} {1}", tier1, tier2);
         UnityEngine.Debug.LogFormat("level {0} {1}", level1, level2);
 
-        int weight1 = ((level1) * 100) / (cardTier1.MaxLevel) + (tier1 - 1) * 100;
-        int weight2 = ((level2) * 100) / (cardTier2.MaxLevel) + (tier2 - 1) * 100;
+        var weight1 = ((level1) * 100) / (cardTier1.MaxLevel) + (tier1 - 1) * 100;
+        var weight2 = ((level2) * 100) / (cardTier2.MaxLevel) + (tier2 - 1) * 100;
         UnityEngine.Debug.LogFormat("weight {0} {1}", weight1, weight2);
 
-        int upTier100 = (weight1 + weight2) / 2;
+        var upTier100 = (weight1 + weight2) / 2;
         UnityEngine.Debug.LogFormat("up tier {0}", upTier100);
 
-        int baseTier = upTier100 / 100 + 1;
-        int upRatio = upTier100 % 100;
+        var baseTier = upTier100 / 100 + 1;
+        var upRatio = upTier100 % 100;
 
         if (upRatio == 0)
         {
@@ -91,7 +91,7 @@ public class TableManager
         }
         else
         {
-            int highTier = System.Math.Min(baseTier + 1, 3);
+            var highTier = System.Math.Min(baseTier + 1, 3);
 
             if (baseTier == highTier)
             {

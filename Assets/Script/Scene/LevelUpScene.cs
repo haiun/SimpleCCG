@@ -51,7 +51,7 @@ public class LevelUpScene : MonoBehaviour
         materialCardSlotDataList.Clear();
         addMaterialExp = 0;
 
-        if (materialGrid == null) materialGrid = new MyCardSlot.Grid(CreateMyCardSlot, DestroyMyCardSlot);
+        materialGrid ??= new MyCardSlot.Grid(CreateMyCardSlot, DestroyMyCardSlot);
 
         materialGrid.ApplyList(materialCardSlotDataList);
         UpdateAddExp();
@@ -63,7 +63,7 @@ public class LevelUpScene : MonoBehaviour
         addMaterialExp = 0;
         foreach (var materialCardSlotData in materialCardSlotDataList)
         {
-            int tier = materialCardSlotData.CardData.UserCard.Tier;
+            var tier = materialCardSlotData.CardData.UserCard.Tier;
             var levelTier = tableManager.CardTierList.FirstOrDefault(d => d.Tier == tier);
             addMaterialExp += levelTier.MaterialExp;
         }
@@ -78,14 +78,14 @@ public class LevelUpScene : MonoBehaviour
     private List<MyCardSlot> CreateMyCardSlot(List<MyCardSlotData> dataList)
     {
         var slotList = GenericPrefab.Instantiate<MyCardSlot>(materialGridGroup.transform, dataList.Count);
-        for (int i = 0; i < dataList.Count; ++i)
+        for (var i = 0; i < dataList.Count; ++i)
         {
             slotList[i].SetData(dataList[i]);
         }
         return slotList;
     }
 
-    private void DestroyMyCardSlot(MyCardSlot slot)
+    private static void DestroyMyCardSlot(MyCardSlot slot)
     {
         Destroy(slot.gameObject);
     }
@@ -128,8 +128,8 @@ public class LevelUpScene : MonoBehaviour
 
     public void OnClickLevelUp()
     {
-        int targetUserCardId = initData.SelectedTargetData.CardData.UserCard.UserCardId;
-        List<int> materialUserCardIdList = materialCardSlotDataList.ConvertAll(d => d.CardData.UserCard.UserCardId);
+        var targetUserCardId = initData.SelectedTargetData.CardData.UserCard.UserCardId;
+        var materialUserCardIdList = materialCardSlotDataList.ConvertAll(d => d.CardData.UserCard.UserCardId);
 
         initData.UserManager.CardLevelUp(targetUserCardId, materialUserCardIdList);
 
@@ -172,11 +172,11 @@ public class LevelUpSceneView
         }
         else
         {
-            ExpCurrentPerNext.text = string.Format("{0}/{1}", originalCardData.Exp + addExp, originalCardData.NextExp);
+            ExpCurrentPerNext.text = $"{originalCardData.Exp + addExp}/{originalCardData.NextExp}";
         }
 
-        float currentRatio = (float)originalCardData.Exp / (float)originalCardData.NextExp;
-        float nextRatio = Mathf.Min((float)(originalCardData.Exp + addExp) / (float)originalCardData.NextExp, 1f);
+        var currentRatio = (float)originalCardData.Exp / (float)originalCardData.NextExp;
+        var nextRatio = Mathf.Min((float)(originalCardData.Exp + addExp) / (float)originalCardData.NextExp, 1f);
 
         CurrentExp.gameObject.SetActive(currentRatio > 0);
         CurrentExp.size = currentRatio;
@@ -184,7 +184,7 @@ public class LevelUpSceneView
         NextExp.size = nextRatio;
         NextExp.gameObject.SetActive(nextRatio > 0);
 
-        AddExp.text = string.Format("+{0} EXP", addExp);
+        AddExp.text = $"+{addExp} EXP";
 
         foreach (var text in ChangeTextColorByLevel)
         {

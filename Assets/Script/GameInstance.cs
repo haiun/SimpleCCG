@@ -12,7 +12,7 @@ public class GameInstance : MonoBehaviour
         tableManager.Initialize();
 
         var userManager = new UserManager();
-        userManager.Initialzie(new UserManagerInitData()
+        userManager.Initialize(new UserManagerInitData()
         {
             TableManager = tableManager,
             CardListSO = CardListSO
@@ -20,7 +20,7 @@ public class GameInstance : MonoBehaviour
         //userManager.Load();
 
         var startScene = GenericPrefab.Instantiate<MainScene>();
-        startScene.Initailze(new MainSceneInitData()
+        startScene.Initialize(new MainSceneInitData()
         {
             TableManager = tableManager,
             UserManager = userManager,

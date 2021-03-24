@@ -22,27 +22,25 @@ public abstract class GenericSlot<TData, TSlot> : MonoBehaviour where TData : cl
 
         public void ApplyList(List<TData> dataList)
         {
-            int modelCount = dataList.Count;
-            int removeCount = SlotList.Count - modelCount;
+            var modelCount = dataList.Count;
+            var removeCount = SlotList.Count - modelCount;
             if (removeCount > 0)
             {
-                for (int i = modelCount; i < SlotList.Count; ++i)
+                for (var i = modelCount; i < SlotList.Count; ++i)
                 {
                     onDestroy(SlotList[i]);
                 }
                 SlotList.RemoveRange(modelCount, removeCount);
             }
 
-            for (int i = 0; i < SlotList.Count; ++i)
+            for (var i = 0; i < SlotList.Count; ++i)
             {
                 SlotList[i].SetData(dataList[i]);
             }
 
-            if (removeCount < 0)
-            {
-                var newDataList = dataList.GetRange(SlotList.Count, -removeCount);
-                SlotList.AddRange(onCraete(newDataList));
-            }
+            if (removeCount >= 0) return;
+            var newDataList = dataList.GetRange(SlotList.Count, -removeCount);
+            SlotList.AddRange(onCraete(newDataList));
         }
     }
 

@@ -10,7 +10,7 @@ namespace User
 
         public void Initialize()
         {
-            if (UserCardList == null) UserCardList = new List<UserCard>();
+            UserCardList ??= new List<UserCard>();
         }
     }
 
