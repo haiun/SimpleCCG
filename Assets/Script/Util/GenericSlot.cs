@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -12,12 +11,40 @@ public abstract class GenericSlot<TData, TSlot> : MonoBehaviour where TData : cl
         private Func<List<TData>, List<TSlot>> onCraete = null;
         private Action<TSlot> onDestroy = null;
 
+        private Transform parent = null;
+
+        public Grid(Transform parent)
+        {
+            onCraete = DefaultCreateSlotList;
+            onDestroy = DefaultDestroySlot;
+            this.parent = parent;
+
+            SlotList = new List<TSlot>();
+        }
+
         public Grid(Func<List<TData>, List<TSlot>> onCraete, Action<TSlot> onDestroy)
         {
             this.onCraete = onCraete;
             this.onDestroy = onDestroy;
 
             SlotList = new List<TSlot>();
+        }
+
+        private List<TSlot> DefaultCreateSlotList(List<TData> dataList)
+        {
+            var slotList = new List<TSlot>();
+            foreach (var data in dataList)
+            {
+                var slot = GenericPrefab.Instantiate<TSlot>(parent);
+                slot.SetData(data);
+                slotList.Add(slot);
+            }
+            return slotList;
+        }
+
+        private void DefaultDestroySlot(TSlot slot)
+        {
+            Destroy(slot.gameObject);
         }
 
         public void ApplyList(List<TData> dataList)
